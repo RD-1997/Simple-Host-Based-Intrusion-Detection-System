@@ -20,6 +20,7 @@ void readFileContent();
 void giveUnnecessaryMessage();
 void getModificationTimeOfFile();
 void deleteFile();
+void deleteMultipleFiles();
 
 
 int main()
@@ -30,8 +31,7 @@ int main()
     readFileContent();
     getModificationTimeOfFile();
     deleteFile();
-
-
+    deleteMultipleFiles();
 }
 /* ####################################
  * Print out current directory
@@ -117,6 +117,7 @@ void deleteFile()
     printf("\n-------Delete file based on input-----\n");
     printf("name a file you want to delete;\n");
     gets(file_name);
+    strcat(file_name, ".txt");
     strcat(directory, file_name);
     status = remove(directory);
 
@@ -127,6 +128,32 @@ void deleteFile()
     {
         printf("Unable to delete file\n");
         perror("Following error occured: ");
+    }
+}
+/* ####################################
+ * Delete files from our list apart from given answer
+ * ####################################*/
+void deleteMultipleFiles()
+{
+    printf("\n-------Delete file based simple array-----\n");
+    int i;
+    char array[][25] = { "virus.txt", "somethingbad.txt"};
+    char status;
+
+    for (i = 0; i<2; i++){
+        char directory[60] = {"C:/Users/test/Downloads/test/"};
+        strcat(directory, array[i]);
+        status = remove(directory);
+
+        if (status == 0)
+        {
+            printf("Removed file: %s \n", array[i]);
+        } else
+        {
+            printf("Unable to delete file\n");
+            perror("Following error occured: ");
+        }
+
     }
 }
 
