@@ -2,9 +2,12 @@ import socket
 import sys
 import validator
 
-HOST = ''  # Symbolic name, meaning all available interfaces
-PORT = 12345  # Arbitrary non-privileged port
+# Symbolic name, meaning all available interfaces
+HOST = ''
+# Arbitrary non-privileged port
+PORT = 12345
 
+#defining and creating socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print('Socket created')
 
