@@ -1,0 +1,5 @@
+mysqldb:
+  host: "localhost"
+  user: "root"
+  password: "welkom123"
+  database: "implementation"

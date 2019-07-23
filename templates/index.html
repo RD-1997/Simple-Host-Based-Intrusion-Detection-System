@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <meta name="description" content="Bootstrap Admin App + jQuery">
+   <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
+   <title>HIDS</title>
+   <!-- =============== VENDOR STYLES ===============-->
+   <!-- FONT AWESOME-->
+   <link rel="stylesheet" href="/static/vendor/fontawesome/css/font-awesome.min.css">
+   <!-- SIMPLE LINE ICONS-->
+   <link rel="stylesheet" href="/static/vendor/simple-line-icons/css/simple-line-icons.css">
+   <!-- ANIMATE.CSS-->
+   <link rel="stylesheet" href="/static/vendor/animate.css/animate.min.css">
+   <!-- WHIRL (spinners)-->
+   <link rel="stylesheet" href="/static/vendor/whirl/dist/whirl.css">
+   <!-- =============== PAGE VENDOR STYLES ===============-->
+   <!-- WEATHER ICONS-->
+   <link rel="stylesheet" href="/static/vendor/weather-icons/css/weather-icons.min.css">
+   <!-- =============== BOOTSTRAP STYLES ===============-->
+   <link rel="stylesheet" href="/static/css/bootstrap.css" id="bscss">
+   <!-- =============== APP STYLES ===============-->
+   <link rel="stylesheet" href="/static/css/app.css" id="maincss">
+</head>
+
+<body>
+   <div class="wrapper">
+      <!-- top navbar-->
+      <header class="topnavbar-wrapper">
+         <!-- START Top Navbar-->
+         <nav role="navigation" class="navbar topnavbar">
+            <!-- START navbar header-->
+            <div class="navbar-header">
+               <a href="#/" class="navbar-brand">
+                  <div class="brand-logo">
+                     <img src="img/logo.png" alt="App Logo" class="img-responsive">
+                  </div>
+                  <div class="brand-logo-collapsed">
+                     <img src="img/logo-single.png" alt="App Logo" class="img-responsive">
+                  </div>
+               </a>
+            </div>
+            <!-- END navbar header-->
+            <!-- START Nav wrapper-->
+            <div class="nav-wrapper">
+               <!-- START Left navbar-->
+               <ul class="nav navbar-nav">
+                  <li>
+                     <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
+                     <a href="#" data-trigger-resize="" data-toggle-state="aside-collapsed" class="hidden-xs">
+                        <em class="fa fa-navicon"></em>
+                     </a>
+                     <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+                     <a href="#" data-toggle-state="aside-toggled" data-no-persist="true" class="visible-xs sidebar-toggle">
+                        <em class="fa fa-navicon"></em>
+                     </a>
+                  </li>
+
+                  <!-- END lock screen-->
+               </ul>
+            </div>
+            <!-- END Nav wrapper-->
+
+         </nav>
+         <!-- END Top Navbar-->
+      </header>
+      <!-- sidebar-->
+      <aside class="aside">
+         <!-- START Sidebar (left)-->
+         <div class="aside-inner">
+            <nav data-sidebar-anyclick-close="" class="sidebar">
+               <!-- START sidebar nav-->
+               <ul class="nav">
+                  <!-- Iterates over all sidebar items-->
+                  <li class="nav-heading ">
+                     <span data-localize="sidebar.heading.HEADER">Main Navigation</span>
+                  </li>
+                  <li class=" ">
+                     <a href="#dashboard" title="Dashboard" data-toggle="collapse">
+                        <div class="pull-right label label-info"></div>
+                        <em class="icon-speedometer"></em>
+                        <span data-localize="sidebar.nav.DASHBOARD">Dashboard</span>
+                     </a>
+                     <ul id="dashboard" class="nav sidebar-subnav collapse">
+                        <li class="sidebar-subnav-header">Dashboard</li>
+                        <li class=" ">
+                           <a href="#" title="Dashboard v1">
+                              <span>Hosts statistics</span>
+                           </a>
+                        </li>
+                     </ul>
+                  </li>
+               </ul>
+               <!-- END sidebar nav-->
+            </nav>
+         </div>
+         <!-- END Off Sidebar (right)-->
+      </aside>
+      <!-- Main section-->
+      <section>
+         <!-- Page content-->
+         <div class="content-wrapper">
+            <div class="content-heading">
+               Host-Based Intrusion Detection Dashboard
+               <small data-localize="dashboard.WELCOME"></small>
+            </div>
+            <!-- START radial charts-->
+            <div class="row mb-lg">
+               <div class="col-sm-4 col-xs-8 text-center">
+                  <p>Overall File Authenticity</p>
+                  <canvas data-classyloader="" data-height="150px" data-diameter="60" data-font-size="25px" data-percentage="66" data-speed="30" data-line-color="#23b7e5" data-remaining-line-color="#edf2f6" data-line-width="2"></canvas>
+               </div>
+               <div class="col-sm-4 col-xs-8 text-center">
+                  <p>Current Progress</p>
+                  <canvas data-classyloader="" data-height="150px" data-diameter="60" data-font-size="25px" data-percentage="30" data-speed="30" data-line-color="#f532e5" data-remaining-line-color="#edf2f6" data-line-width="2"></canvas>
+               </div>
+               <div class="col-sm-4 col-xs-8 text-center">
+                  <p>Space Usage</p>
+                  <canvas data-classyloader="" data-height="150px" data-diameter="60" data-font-size="25px" data-percentage="50" data-speed="30" data-line-color="#7266ba" data-remaining-line-color="#edf2f6" data-line-width="2"></canvas>
+               </div>
+            </div>
+            <!-- START radial charts-->
+            <!-- START Multiple List group-->
+            <div class="list-group alert alert-danger">
+               <a href="#" class="list-group-item">
+                  <table class="wd-wide">
+                     <tbody>
+                        <tr>
+                           <td class="wd-xs">
+                              <div class="ph">
+                                 <img src="img/dummy.png" alt="" class="media-box-object img-responsive img-rounded thumb64">
+                              </div>
+                           </td>
+                           <td>
+                              <div class="ph">
+                                 <h4 class="media-box-heading">{{ filename }}</h4>
+                                 <small class="text-muted">Vestibulum ante ipsum primis in faucibus orci</small>
+                              </div>
+                           </td>
+                           <td class="wd-sm hidden-xs hidden-sm">
+                              <div class="ph">
+                                 <p class="m0", data-line-color="red">{{ altered }}</p>
+                                 <small class="text-muted">Last edit: 4 weeks ago</small>
+                              </div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </a>
+            </div>
+            <div class="list-group alert alert-success">
+               <a href="#" class="list-group-item">
+                  <table class="wd-wide">
+                     <tbody>
+                        <tr>
+                           <td class="wd-xs">
+                              <div class="ph">
+                                 <img src="img/dummy.png" alt="" class="media-box-object img-responsive img-rounded thumb64">
+                              </div>
+                           </td>
+                           <td>
+                              <div class="ph">
+                                 <h4 class="media-box-heading">Word.exe</h4>
+                                 <small class="text-muted">Vestibulum ante ipsum primis in faucibus orci</small>
+                              </div>
+                           </td>
+                           <td class="wd-sm hidden-xs hidden-sm">
+                              <div class="ph">
+                                 <p class="m0">{{ correct }}</p>
+                                 <small class="text-muted">Last edit: Today at 06:23 am</small>
+                              </div>
+                        </tr>
+                     </tbody>
+                  </table>
+               </a>
+            </div>
+            <div class="list-group, alert alert-success">
+               <a href="#" class="list-group-item">
+                  <table class="wd-wide">
+                     <tbody>
+                        <tr>
+                           <td class="wd-xs">
+                              <div class="ph">
+                                 <img src="img/dummy.png" alt="" class="media-box-object img-responsive img-rounded thumb64">
+                              </div>
+                           </td>
+                           <td>
+                              <div class="ph">
+                                 <h4 class="media-box-heading">keyfile.txt</h4>
+                                 <small class="text-muted">Vestibulum ante ipsum primis in faucibus orci</small>
+                              </div>
+                           </td>
+                           <td class="wd-sm hidden-xs hidden-sm">
+                              <div class="ph">
+                                 <p class="m0">{{ correct }}</p>
+                                 <small class="text-muted">Last edit: Yesterday at 10:20 pm</small>
+                              </div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </a>
+               <!-- END dashboard main content-->
+            </div>
+            <!-- END Multiple List group-->
+         </div>
+      </section>
+      <!-- Page footer-->
+      <footer>
+         <span>&copy; 2016 - Angle</span>
+      </footer>
+   </div>
+    <!-- =============== VENDOR SCRIPTS ===============-->
+   <!-- MODERNIZR-->
+   <script src="/static/vendor/modernizr/modernizr.custom.js"></script>
+   <!-- MATCHMEDIA POLYFILL-->
+   <script src="/static/vendor/matchMedia/matchMedia.js"></script>
+   <!-- JQUERY-->
+   <script src="/static/vendor/jquery/dist/jquery.js"></script>
+   <!-- BOOTSTRAP-->
+   <script src="/static/vendor/bootstrap/dist/js/bootstrap.js"></script>
+   <!-- STORAGE API-->
+   <script src="/static/vendor/jQuery-Storage-API/jquery.storageapi.js"></script>
+   <!-- JQUERY EASING-->
+   <script src="/static/vendor/jquery.easing/js/jquery.easing.js"></script>
+   <!-- ANIMO-->
+   <script src="/static/vendor/animo.js/animo.js"></script>
+   <!-- SLIMSCROLL-->
+   <script src="/static/vendor/slimScroll/jquery.slimscroll.min.js"></script>
+   <!-- SCREENFULL-->
+   <script src="/static/vendor/screenfull/dist/screenfull.js"></script>
+   <!-- LOCALIZE-->
+   <script src="/static/vendor/jquery-localize-i18n/dist/jquery.localize.js"></script>
+   <!-- RTL demo-->
+   <script src="/static/js/demo/demo-rtl.js"></script>
+   <!-- =============== PAGE VENDOR SCRIPTS ===============-->
+   <!-- SPARKLINE-->
+   <script src="/static/vendor/sparkline/index.js"></script>
+   <!-- FLOT CHART-->
+   <script src="/static/vendor/Flot/jquery.flot.js"></script>
+   <script src="/static/vendor/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+   <script src="/static/vendor/Flot/jquery.flot.resize.js"></script>
+   <script src="/static/vendor/Flot/jquery.flot.pie.js"></script>
+   <script src="/static/vendor/Flot/jquery.flot.time.js"></script>
+   <script src="/static/vendor/Flot/jquery.flot.categories.js"></script>
+   <script src="/static/vendor/flot-spline/js/jquery.flot.spline.min.js"></script>
+   <!-- CLASSY LOADER-->
+   <script src="/static/vendor/jquery-classyloader/js/jquery.classyloader.min.js"></script>
+   <!-- MOMENT JS-->
+   <script src="/static/vendor/moment/min/moment-with-locales.min.js"></script>
+   <!-- SKYCONS-->
+   <script src="/static/vendor/skycons/skycons.js"></script>
+   <!-- DEMO-->
+   <script src="/static/js/demo/demo-flot.js"></script>
+   <!-- VECTOR MAP-->
+   <script src="/static/vendor/ika.jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+   <script src="/static/vendor/ika.jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+   <script src="/static/vendor/ika.jvectormap/jquery-jvectormap-us-mill-en.js"></script>
+   <script src="/static/js/demo/demo-vector-map.js"></script>
+   <!-- =============== APP SCRIPTS ===============-->
+   <script src="/static/js/app.js"></script>
+   <!-- DATATABLES-->
+   <script src="/static/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+   <script src="/static/vendor/datatables-colvis/js/dataTables.colVis.js"></script>
+   <script src="/static/vendor/datatables/media/js/dataTables.bootstrap.js"></script>
+   <script src="/static/js/demo/demo-datatable.js"></script>
+</body>
+
+</html>
