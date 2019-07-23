@@ -51,8 +51,17 @@ def validatingFiles(hash, filename):
 
         # checks whether the hash is still the same, or whether it is altered.
         if filehash == passedHash:
-            
-            # if hash is unchanged, it does nothing.
+
+            # if the hash is still the same, then just just update the last scan time
+            query2 = "UPDATE files SET lastscan = %s WHERE filename = %s"
+            param2 = (scantime, passedFilename,)
+
+            # puts the query and parameters together and executes it
+            cursor.execute(query2, param2)
+
+            # commit is necessary for the changes to be applied and saved in the database
+            conn.commit()
+
             print("Everything is OK. File is authentic.")
 
         else:
@@ -60,15 +69,13 @@ def validatingFiles(hash, filename):
             authenticity = "ALTERED"
 
             # making the query SQL injection proof
-            query2 = "UPDATE files SET authenticity = %s, lastscan = %s WHERE filename = %s"
-            param2 = (authenticity, scantime, passedFilename,)
+            query3 = "UPDATE files SET authenticity = %s, lastscan = %s WHERE filename = %s"
+            param3 = (authenticity, scantime, passedFilename,)
 
             # puts the query and parameters together and executes it
-            cursor.execute(query2, param2)
+            cursor.execute(query3, param3)
 
             # commit is necessary for the changes to be applied and saved in the database
             conn.commit()
             print("File is altered. That does not look good.")
 
-
-validatingFiles('rubiishahshh', 'sesamestreet.exe')

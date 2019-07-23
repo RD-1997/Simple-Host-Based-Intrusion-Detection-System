@@ -3,3 +3,10 @@ mysqldb:
   user: "root"
   password: "welkom123"
   database: "implementation"
+
+socket:
+  port: 12340
+  host: ''
+  maxcon: 10
+  maxbyte: 2048
+  decode: 'utf-8'

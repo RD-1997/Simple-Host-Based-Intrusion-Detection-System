@@ -1,17 +1,22 @@
 import socket
 import sys
 import validator
+import yaml
 
-# Symbolic name, meaning all available interfaces
-HOST = ''
-# Arbitrary non-privileged port
-PORT = 12345
+# imports config file for security measures
+with open("config.yaml", "r") as ymlfile:
+    cfg = yaml.load(ymlfile)
 
-#defining and creating socket
+# symbolic name, meaning all available interfaces
+HOST = cfg['socket']['host']
+# port to communicate over
+PORT = cfg['socket']['port']
+
+# defining and creating socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print('Socket created')
 
-# Bind socket to local host and port
+# bind socket to local host and port
 try:
     s.bind((HOST, PORT))
 
@@ -21,18 +26,26 @@ except socket.error as msg:
 
 print('Socket bind complete')
 
-# Start listening on socket
-s.listen(10)
+# start listening on socket up to 10 clients simultaneously
+s.listen(cfg['socket']['maxcon'])
 print('Socket now listening')
 
-# now keep talking with the client
+# keeps listening to the clients
 while 1:
     # wait to accept a connection - blocking call
     conn, addr = s.accept()
     print('Connected with ' + addr[0] + ':' + str(addr[1]))
 
-    data = conn.recv(2048)
+    # receives data up to these bytes
+    data = conn.recv(cfg['socket']['maxbyte'])
 
-    print(data)
+    # decodes the data that is being send into UTF-8 format so it becomes usable
+    receivedData = data.decode(cfg['socket']['decode'])
+
+    # splits the data into two different variables
+    filename, hash = receivedData.split(':')
+
+    # sends the variables to validate the file
+    validator.validatingFiles(hash, filename)
 
 s.close()
