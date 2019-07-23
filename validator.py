@@ -1,21 +1,14 @@
-import mysql.connector as mysql
-import yaml
+# importing our db.py
+import db
 
-# loading config file for extra security
-with open("config.yaml", "r") as ymlfile:
-    cfg = yaml.load(ymlfile)
+# initializing db connection
+conn = db.connect()
+cursor = conn.cursor()
 
-# initializing database connection
-db = mysql.connect(
-    host = cfg['mysqldb']['host'],
-    user = cfg['mysqldb']['user'],
-    passwd = cfg['mysqldb']['password'],
-    database = cfg['mysqldb']['database']
-)
-cursor = db.cursor()
-
+# function to validate the incoming files from the host
 def validatingFiles(hash, filename):
-    global authenticity     # variable used to update file authenticity in database
+    # variable used to update file authenticity in database
+    global authenticity
 
     # passing the passed variables into converted string variables
     passedHash = str(hash)
@@ -38,8 +31,9 @@ def validatingFiles(hash, filename):
         db.commit()
         print("data added")
 
+    #if data is present in database do following:
     else:
-        # looping through columns and putting values of the file in variables
+        # scanning through columns and putting values of the file in variables
         for row in records:
          filename = row[1] # retrieves filename
          filehash = row[2] # retrieves filehash
@@ -60,4 +54,4 @@ def validatingFiles(hash, filename):
             print("File is altered.")
 
 
-validatingFiles('m34jhwejh234', 'word.exe')
+validatingFiles('m34jh234', 'sesamestreet.exe')

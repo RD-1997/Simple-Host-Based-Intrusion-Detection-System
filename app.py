@@ -1,18 +1,13 @@
 from flask import Flask, render_template
-import mysql.connector as mysql
+import db
 
 # defining the flask app
 app = Flask(__name__)
 
+# initializing db connection
+conn = db.connect()
+cursor = conn.cursor()
 
-# initializing database connection
-db = mysql.connect(
-    host = "localhost",
-    user = "root",
-    passwd = "welkom123",
-    database = "implementation"
-)
-cursor = db.cursor()
 
 
 @app.route("/", methods=['GET'])
