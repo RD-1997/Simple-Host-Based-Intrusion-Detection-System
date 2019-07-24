@@ -9,155 +9,137 @@
 #include <time.h>
 #include <string.h>
 #include <direct.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
+#pragma comment(lib, "ws2_32.lib") //library winsock
 
 /* ####################################
  * Refers to the sub functions
  * ####################################*/
 
-void printCurrentFile();
-void printListOfFiles();
-void readFileContent();
 void giveUnnecessaryMessage();
-void getModificationTimeOfFile();
-void deleteFile();
-void deleteMultipleFiles();
+int countDown(int);
+void list_files();
+void start_winsock();
+void create_socket();
+void socket_send(char *);
 
 
-int main()
-{
-    giveUnnecessaryMessage();
-    printCurrentFile();
-    printListOfFiles();
-    readFileContent();
-    getModificationTimeOfFile();
-    deleteFile();
-    deleteMultipleFiles();
-}
-/* ####################################
- * Print out current directory
- * ####################################*/
-void printCurrentFile()
-{
-    char* buffer;
-    printf("\n----------Printing Current path-------\n");
-    printf("Current Directory is: ");
-    // Get the current working directory:
-    if( (buffer = _getcwd( NULL, 0 )) == NULL )
-        perror( "_getcwd error" );
-    else
-    {
-        printf( "%s", buffer);
-        free(buffer);
+/* global variables */
+char directory[] = {"C:/Users/test/Downloads/test/"};
+int counter, i = 0, j = 0, k = 0, l = 254, n = 0;
+char *filesList[254];// gives error when you use variables
+SOCKET s;
+struct sockaddr_in server;
+
+char *makeonstring(size_t size, char *array[size], const char *joint){
+    size_t jlen, lens[size];
+    size_t i, total_size = (size-1) * (jlen=strlen(joint)) + 1;
+    char *result, *p;
+
+
+    for(i=0;i<size;++i){
+        total_size += (lens[i]=strlen(array[i]));
     }
+    p = result = malloc(total_size);
+    for(i=0;i<size;++i){
+        memcpy(p, array[i], lens[i]);
+        p += lens[i];
+        if(i<size-1){
+            memcpy(p, joint, jlen);
+            p += jlen;
+        }
+    }
+    *p = '\0';
+    return result;
 }
 
-/* ####################################
- * Print out files in directory
- * ####################################*/
-void printListOfFiles()
+int main() {
+    giveUnnecessaryMessage();
+    start_winsock();
+    create_socket();
+    printf("Enter in seconds a value ot repeat the program\n");
+    scanf("%d",&counter); // scan the answer and put in counter
+    //loop
+    countDown(counter); // use answer counter in function
+    list_files(); //update array
+    char *cat = makeonstring(i, filesList, ";");
+    puts(cat);
+    socket_send(cat);
+
+    return 0;
+}
+/* function for counting down */
+int countDown(int a)
+{
+    while (a != 0) // loop for counter.
+    {
+        printf("\n%d before scanning again..", a);
+        sleep(1);
+        a--;
+    }
+    printf("\nTimer has been expired..\n");
+}
+/* return array */
+void list_files()
 {
     DIR *d;
     struct dirent *dir;
-    d = opendir("./test");
-    printf("\n----------Printing files in directory-------\n");
-    printf("List of files are being printed:");
-    printf("\n\n");
-    if (d) {
-        while ((dir = readdir(d)) != NULL) {
-            if (dir->d_type == DT_REG)
-                printf("%s\n", dir->d_name);
-
+    d = opendir(directory);
+    //Put file names into the array
+    while((dir = readdir(d)) != NULL) {
+        if ( ( i < 254) && ! ( strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0))
+        {
+            filesList[i] = malloc( strlen ( dir->d_name) + 1); // allocate memory
+            strcpy(filesList[i], dir->d_name); // put file names in to array
+            i++; // do +1 to read each single array line
         }
-        closedir(d);
     }
-    printf("\nList is printed.\n");
+//    for(n = 0; n < i;n++){
+//        printf("%s\n", filesList[n]);
+//    }
+//    for(n = 0; n < i;n++){
+//        free ( filesList[n]);
+//    }
 }
-
-/* ####################################
- * Read file content
- * ####################################*/
-void readFileContent()
+void start_winsock()
 {
-    FILE *f;
-    char s;
-    f=fopen("./test/todo.txt","r");
-    printf("\n----------Reading file content-------\n");
-    printf("File text.txt as test is being read\n");
-    printf("Outcome of the file is: \n");
-    while((s=fgetc(f))!=EOF) {
-        printf("%c",s);
-    }
-    fclose(f);
-}
-/* ####################################
- * Show access and modify time of file
- * ####################################*/
-void getModificationTimeOfFile()
-{
-    struct stat filestat;
-
-    stat("test.txt",&filestat);
-    /* newline included in ctime() output */
-    printf("\n-------Show Access and Modify time of file-----\n");
-    printf(" File access time %s",
-           ctime(&filestat.st_atime)
-    );
-    printf(" File modify time %s",
-           ctime(&filestat.st_mtime)
-    );
-}
-/* ####################################
- * Delete file based on answer
- * ####################################*/
-void deleteFile()
-{
-    int status;
-    char file_name[20];
-    char directory[40] = "C:/Users/test/Downloads/test/";
-    printf("\n-------Delete file based on input-----\n");
-    printf("name a file you want to delete;\n");
-    gets(file_name);
-    strcat(file_name, ".txt");
-    strcat(directory, file_name);
-    status = remove(directory);
-
-    if (status == 0)
+    WSADATA wsa;
+    printf("\nInitializing Winsock..");
+    if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
     {
-        printf("%s file deleted successfully. \n",file_name);
-    } else
-    {
-        printf("Unable to delete file\n");
-        perror("Following error occured: ");
+        printf("Failed to start. Error Code: %d", WSAGetLastError());
     }
+    printf("\nInitialization successful..");
 }
-/* ####################################
- * Delete files from our list apart from given answer
- * ####################################*/
-void deleteMultipleFiles()
+void create_socket()
 {
-    printf("\n-------Delete file based simple array-----\n");
-    int i;
-    char array[][25] = { "virus.txt", "somethingbad.txt"};
-    char status;
+    if ((s= socket(AF_INET, SOCK_STREAM, 0 )) == INVALID_SOCKET)
+        printf("Could not create socket: %d", WSAGetLastError);
 
-    for (i = 0; i<2; i++){
-        char directory[60] = {"C:/Users/test/Downloads/test/"};
-        strcat(directory, array[i]);
-        status = remove(directory);
+    printf("\nSocket Has been created successfully..");
+    server.sin_addr.s_addr = inet_addr("192.168.2.39");
+    server.sin_family = AF_INET;
+    server.sin_port = htons(12345);
 
-        if (status == 0)
-        {
-            printf("Removed file: %s \n", array[i]);
-        } else
-        {
-            printf("Unable to delete file\n");
-            perror("Following error occured: ");
+    if (connect(s, (struct sockaddr *)&server, sizeof(server)) < 0)
+    {
+        puts("connect error");
+    }
+
+    puts("\nSuccessfully connected to the server..\n");
+}
+void socket_send(char *message) {
+
+        if(send(s, message,strlen(message), 0) < 0) {
+            puts("Send failed");
         }
 
-    }
+
+    puts("Data send");
+
 }
-
-
 /* ####################################
  * Message displayed when launching program
  * ####################################*/
@@ -170,3 +152,5 @@ void giveUnnecessaryMessage()
     printf("##### Raoul Dinmohamed & Hakan Kece #######\n");
     printf("###########################################\n");
 }
+
+
