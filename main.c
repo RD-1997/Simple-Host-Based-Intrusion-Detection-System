@@ -59,7 +59,7 @@ int main() {
         socket_send(temp); // send through socket inside loop..
         create_socket(); // reconnect to send again..
         sleep(2); // sleep 2 seconds.
-        goto DIRTYLOOP; // looping code of loop
+        goto DIRTYLOOP; // dirty way of looping code
     }
     return 0;
 }
