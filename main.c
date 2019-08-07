@@ -42,8 +42,9 @@ int main() {
     giveUnnecessaryMessage();
     start_winsock(); // start winsock
     create_socket(); // create the socket
-    printf("Enter in seconds a value ot repeat the program\n"); // ask for countdown, als usable for loop.
+    printf("\nEnter in seconds a value ot repeat the program\n"); // ask for countdown, als usable for loop.
     scanf("%d",&counter); // scan the answer and put in counter
+    DIRTYLOOP: // dirty way of looping code
     countDown(counter); // use answer counter in function
     list_files(); // fill in one array
     list_filesz(); // fill in second array for manipulation (hashing)
@@ -58,6 +59,7 @@ int main() {
         socket_send(temp); // send through socket inside loop..
         create_socket(); // reconnect to send again..
         sleep(2); // sleep 2 seconds.
+        goto DIRTYLOOP; // looping code of loop
     }
     return 0;
 }
