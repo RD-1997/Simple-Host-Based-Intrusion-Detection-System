@@ -39,7 +39,7 @@ def validatingFiles(hash, filename):
 
         # commit is necessary for the changes to be applied and saved in the database
         conn.commit()
-        print("data added")
+        print("New file detected. Data added to database")
 
     # if data is present in database do following:
     else:
@@ -66,7 +66,7 @@ def validatingFiles(hash, filename):
 
         else:
             # if hash is changed, it updates the file authenticity state to ALTERED in the database.
-            authenticity = "ALTERED"
+            authenticity = "CORRUPTED"
 
             # making the query SQL injection proof
             query3 = "UPDATE files SET authenticity = %s, lastscan = %s WHERE filename = %s"
@@ -77,5 +77,5 @@ def validatingFiles(hash, filename):
 
             # commit is necessary for the changes to be applied and saved in the database
             conn.commit()
-            print("File is altered. That does not look good.")
+            print("File is corrupted. That does not look good.")
 

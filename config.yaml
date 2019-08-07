@@ -5,7 +5,7 @@ mysqldb:
   database: "implementation"
 
 socket:
-  port: 12340
+  port: 12345
   host: ''
   maxcon: 10
   maxbyte: 2048

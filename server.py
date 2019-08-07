@@ -43,7 +43,7 @@ while 1:
     receivedData = data.decode(cfg['socket']['decode'])
 
     # splits the data into two different variables
-    filename, hash = receivedData.split(':')
+    hash, filename = receivedData.split(';')
 
     # sends the variables to validate the file
     validator.validatingFiles(hash, filename)
