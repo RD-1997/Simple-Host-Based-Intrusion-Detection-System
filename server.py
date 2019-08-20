@@ -1,6 +1,6 @@
 import socket
 import sys
-import validator
+import filemanager
 import yaml
 
 # imports config file for security measures
@@ -34,18 +34,21 @@ print('Socket now listening')
 while 1:
     # wait to accept a connection - blocking call
     conn, addr = s.accept()
-    print('Connected with ' + addr[0] + ':' + str(addr[1]))
 
-    # receives data up to these bytes
+    # receives data up to these bytes. The max byte is set to 512 because it will only receive minimal data such as an md5 hash (which is 128bits)
+    # and a filename which is also not much. a max byte of 512 is set because it could receive multiple inputs at once from several clients.
     data = conn.recv(cfg['socket']['maxbyte'])
 
     # decodes the data that is being send into UTF-8 format so it becomes usable
     receivedData = data.decode(cfg['socket']['decode'])
 
     # splits the data into two different variables
-    hash, filename = receivedData.split(';')
+    scanner, filename, hash = receivedData.split(';')
 
+    print('')
+    print('Connected with ' + scanner + " from address: " + addr[0] + ':' + str(addr[1]))
+    print('File received from scanner: ' + scanner)
     # sends the variables to validate the file
-    validator.validatingFiles(hash, filename)
+    filemanager.manageFiles(hash, filename, scanner)
 
 s.close()

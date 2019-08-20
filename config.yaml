@@ -5,8 +5,8 @@ mysqldb:
   database: "implementation"
 
 socket:
-  port: 12345
+  port: 12347
   host: ''
   maxcon: 10
-  maxbyte: 2048
+  maxbyte: 512
   decode: 'utf-8'

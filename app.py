@@ -18,11 +18,15 @@ cursor.execute(query)
 df = pd.DataFrame(cursor.fetchall())
 df.columns = cursor.column_names
 
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+
+
 ##################################### START INFORMATION TILES #####################################
 
 authcount = 0
 for k, v in df.iterrows():
-    if v[3] == "AUTHENTIC":
+    if v[6] == "unchanged":
         authcount += 1
 
 # counting the total files for visualization purposes
@@ -37,29 +41,29 @@ authPerc = round(authPerc, 2)
 ##################################### START PIE CHART #####################################
 
 pieFrame = pd.DataFrame()
-pieFrame = df[['authenticity']]
+pieFrame = df[['state']]
 pieFrame['num'] = 1
-pieFrame = pieFrame.groupby('authenticity', as_index=False).agg(sum)
+pieFrame = pieFrame.groupby('state', as_index=False).agg(sum)
 
 plt.pie(
     pieFrame['num'],
-    labels=pieFrame['authenticity'],
+    labels=pieFrame['state'],
     shadow=True,
     startangle=90,
     autopct='%1.1f%%',
 )
 
 plt.axis('equal')
-plt.title('Overall file authenticity')
+plt.title('Overall file state')
 plt.savefig('static/images/piechart.png', bbox_inches='tight')
 plt.show()
 
 ##################################### END PIE CHART #####################################
-
+print("hello world")
 
 ##################################### START TABLE FILES WITH NO SCAN ########################
 
-queryScan = "select * from files WHERE lastscan <= curdate() - interval 1 day;"
+queryScan = "select * from files WHERE last_scan <= curdate() - interval 1 day;"
 cursor.execute(queryScan)
 
 # storing the values in a dataframe so it can easily used for visualization
@@ -72,15 +76,14 @@ dfScan.columns = cursor.column_names
 ##################################### START BAR CHART #####################################
 
 df['num'] = 1
-df['lastscan'] = [d.date() for d in df['lastscan']]
+df['last_scan'] = [d.date() for d in df['last_scan']]
 
 Lawldf = pd.DataFrame()
-Lawldf = df[['lastscan', 'num']]
+Lawldf = df[['last_scan', 'num']]
 
-Lawldf = Lawldf.groupby('lastscan', as_index=False).agg(sum)
+Lawldf = Lawldf.groupby('last_scan', as_index=False).agg(sum)
 
-print(Lawldf)
-dateScan = Lawldf['lastscan']
+dateScan = Lawldf['last_scan']
 files = Lawldf['num']
 
 plt.bar(dateScan, files, 1)

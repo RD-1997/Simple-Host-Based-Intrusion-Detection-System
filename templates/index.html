@@ -161,7 +161,8 @@
             </div>
             <!-- START radial charts-->
             <!-- START Multiple List group-->
-            <div class="col-lg-6">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10">
       <!-- START panel tab-->
             <div role="tabpanel" class="panel">
                <!-- Nav tabs-->
@@ -182,11 +183,11 @@
                      <div class="list-group mb0">
 
                         {% for k, v in data.iterrows() %}
-                        {% if v[3] == "CORRUPTED" %}
+                        {% if v[6] == "changed" %}
 
                         <a href="#" class="list-group-item">
-                           <span class="label label-danger pull-right">File corrupted. File hash does not match original hash.</span>
-                           <em class="fa fa-fw fa-exclamation mr"></em>{{v[1]}}</a>
+                           <span class="label label-danger pull-right">File has been changed. New file hash does not match original hash.</span>
+                           <em class="fa fa-fw fa-exclamation mr"></em>{{v[2]}}</a>
                         {% endif %}
                         {% endfor %}
 
@@ -200,20 +201,24 @@
                         <table class="table table-bordered table-hover table-striped">
                            <thead>
                               <tr>
+                                 <th>Scanner</th>
                                  <th>Filename</th>
                                  <th>Original hash</th>
-                                 <th>Authenticity</th>
+                                 <th>New Hash</th>
                                  <th>Time of Discovery</th>
+                                 <th>State</th>
                               </tr>
                            </thead>
                            <tbody>
                            {% for k, v in data.iterrows() %}
-                           {% if v[3] == "CORRUPTED" %}
+                           {% if v[6] == "changed" %}
                               <tr>
                                  <td>{{v[1]}}</td>
                                  <td>{{v[2]}}</td>
-                                 <td class="label label-danger text-center col-full-center">CORRUPTED</td>
-                                 <td>{{v[4]}}</td>
+                                 <td>{{v[3]}}</td>
+                                 <td>{{v[7]}}</td>
+                                 <td>{{v[8]}}</td>
+                                 <td class="label label-danger text-center col-full-center">Changed</td>
 
                               </tr>
                            {% endif %}
@@ -225,12 +230,48 @@
 
                   </div>
                </div>
+               <div class="col-lg-1"></div>
+
             </div>
             <!-- END panel tab-->
          </div>
             <div class="row">
 
-         <div class="col-lg-6">
+         </div>
+            <br><br>
+            <div class="row">
+            <div class="col-lg-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading"><b>Files that have not been scanned fore more than 1 day</b></div>
+                     <div class="panel-body">
+                        <div class="table-responsive">
+                           <table class="table table-striped">
+                              <thead>
+                                 <tr>
+                                    <th>#</th>
+                                    <th>Scanner</th>
+                                    <th>Filename</th>
+                                    <th>Last Known State</th>
+                                    <th>Last Scan</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                              {% for l, m in scandata.iterrows() %}
+                                 <tr>
+                                    <td>{{m[0]}}</td>
+                                    <td>{{m[1]}}</td>
+                                    <td>{{m[2]}}</td>
+                                    <td>{{m[6]}}</td>
+                                    <td>{{m[5]}}</td>
+                                 </tr>
+                           {% endfor %}
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                        <div class="col-lg-6">
             <!-- START carousel-->
             <div id="carousel-example-captions" data-ride="carousel" class="carousel slide">
                <ol class="carousel-indicators">
@@ -257,40 +298,6 @@
             </div>
             <!-- END carousel-->
          </div>
-         </div>
-            <br><br>
-            <div class="row">
-               <div class="col-lg-3"></div>
-            <div class="col-lg-6">
-                  <div class="panel panel-default">
-                     <div class="panel-heading"><b>Files that have not been scanned fore more than 1 day</b></div>
-                     <div class="panel-body">
-                        <div class="table-responsive">
-                           <table class="table table-striped">
-                              <thead>
-                                 <tr>
-                                    <th>#</th>
-                                    <th>Filename</th>
-                                    <th>Authenticity</th>
-                                    <th>Last Scan</th>
-                                 </tr>
-                              </thead>
-                              <tbody>
-                              {% for l, m in scandata.iterrows() %}
-                                 <tr>
-                                    <td>{{m[0]}}</td>
-                                    <td>{{m[1]}}</td>
-                                    <td>{{m[3]}}</td>
-                                    <td>{{m[4]}}</td>
-                                 </tr>
-                           {% endfor %}
-                              </tbody>
-                           </table>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-3"></div>
 
             </div>
 
