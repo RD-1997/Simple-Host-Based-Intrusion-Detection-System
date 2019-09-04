@@ -1,0 +1,12 @@
+mysqldb:
+  host: "localhost"
+  user: "root"
+  password: "welkom123"
+  database: "implementation"
+
+socket:
+  port: 12347
+  host: ''
+  maxcon: 10
+  maxbyte: 512
+  decode: 'utf-8'
